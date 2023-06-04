@@ -17,6 +17,10 @@ function App() {
     }
   }, [rings]);
 
+  function stopPlaying(val: boolean) {
+    setIsPlaying(val);
+  }
+
   if (!isPlaying) {
     return (
       <>
@@ -31,6 +35,7 @@ function App() {
           <input
             type="number"
             className="border-none outline-none bg-blue-300 h-10 w-44 rounded-lg text-3xl font-bold text-gray-800 text-center"
+            readOnly
             value={rings}
           />
           <ArrowUpCircleIcon
@@ -48,7 +53,7 @@ function App() {
     );
   }
 
-  return <Playground rings={rings} goBack={setIsPlaying} />;
+  return <Playground rings={rings} stopPlaying={stopPlaying} />;
 }
 
 export default App;
