@@ -1,6 +1,6 @@
 import { ArrowUturnLeftIcon } from "@heroicons/react/24/outline";
 import { Sticks } from "./Sticks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 type Props = {
   rings: number;
   stopPlaying: (val: boolean) => void;
@@ -8,7 +8,7 @@ type Props = {
 
 function creatRingArr(rings: number) {
   let arr = [];
-  for (let i = 1; i <= rings; i++) {
+  for (let i = rings; i >= 1; i--) {
     arr.push(i);
   }
   return arr;
@@ -16,9 +16,26 @@ function creatRingArr(rings: number) {
 
 const Playground = ({ rings, stopPlaying }: Props) => {
   const ringArr = creatRingArr(rings);
-  const [firstBar, setFirstBar] = useState<number[] | undefined>(ringArr);
-  const [secondBar, setSecondBar] = useState<number[] | undefined>();
-  const [thirdBar, setThirdBar] = useState<number[] | undefined>();
+  const [final, setFinal] = useState<number[]>(ringArr);
+  const [firstBar, setFirstBar] = useState<number[]>(ringArr);
+  const [secondBar, setSecondBar] = useState<number[]>([]);
+  const [thirdBar, setThirdBar] = useState<number[]>([]);
+
+  function arraysAreEqual(array1: number[], array2: number[]) {
+    // Step 1: Check array lengths
+    if (array1.length !== array2.length) {
+      return false;
+    }
+
+    // Step 2: Compare each element
+    return array1.every((element, index) => element === array2[index]);
+  }
+
+  useEffect(() => {
+    if (arraysAreEqual(final, thirdBar)) {
+      alert("You won!");
+    }
+  }, [thirdBar]);
 
   return (
     <>
@@ -32,9 +49,9 @@ const Playground = ({ rings, stopPlaying }: Props) => {
         </div>
       </header>
       <main className="flex w-full pt-32 justify-center items-center gap-80">
-        <Sticks rings={firstBar} />
-        <Sticks rings={secondBar} />
-        <Sticks rings={thirdBar} />
+        <Sticks rings={firstBar} setRings={setFirstBar} />
+        <Sticks rings={secondBar} setRings={setSecondBar} />
+        <Sticks rings={thirdBar} setRings={setThirdBar} />
       </main>
     </>
   );
